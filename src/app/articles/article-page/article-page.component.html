@@ -1,0 +1,98 @@
+<div class="p-20">
+  <p-toast></p-toast>
+
+  <div class="w-full flex justify-center items-center">
+    <h1 class="text-6xl font-extrabold text-center mb-20 underline">ARTICLE DATABASE</h1>
+  </div>
+
+  <ng-container *ngIf="articleState.state$ | async as state">
+    <div>
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="text-md font-bold">Press any article code to copy it.</p>
+        </div>
+        <p-table
+          [customSort]="true" [value]="state.articles"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [globalFilterFields]="['code', 'name', 'consumption', 'machinery']"
+          dataKey="code" editMode="row">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:20%">Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:20%" pSortableColumn="name">Name</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:20%">Consumption</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:20%">Machinery</th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:20%"></th>
+            </tr>
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
+                <p-columnFilter type="text" field="code"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+                <p-columnFilter type="text" field="name"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+                <p-columnFilter type="text" field="consumption"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+                <p-columnFilter type="text" field="machinery"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-article let-editing="editing">
+            <tr [pEditableRow]="article" class="bg-base-200 text-accent border-b-2 border-base-300">
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="copyCodeToClipboard(article.code)">{{article.code}}</span>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input class="bg-base-200 p-2 rounded" pInputText type="text" [(ngModel)]="article.name" required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{article.name}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input class="bg-base-200 p-2 rounded" pInputText type="text" [(ngModel)]="article.consumption" required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{article.consumption}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input class="bg-base-200 p-2 rounded" pInputText type="text" [(ngModel)]="article.machinery" required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{article.machinery}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td class="border-r-2 border-base-300">
+                <div class="flex align-items-center justify-content-center gap-2">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(article)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" class="p-button-rounded p-button-text p-button-danger"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+
+
+      </div>
+    </div>
+  </ng-container>
+</div>
