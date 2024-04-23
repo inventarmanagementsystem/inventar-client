@@ -5,6 +5,7 @@ import {CreateArticleRequest} from "../models/create-article-request.model";
 import {UpdateArticleRequest} from "../models/update-article-request.model";
 import {Article} from "../models/article.model";
 import {ArticleService} from "./article.service";
+import {MessageService} from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class ArticleStateService {
   });
   state$: Observable<ArticleState> = this.stateSubject.asObservable();
 
-  constructor(private service: ArticleService) { }
+  constructor(private messageService: MessageService,private service: ArticleService) { }
 
   // Service calls
 
@@ -26,6 +27,7 @@ export class ArticleStateService {
     this.setLoading(true)
     this.service.createArticle(request).subscribe({
       next: (newArticle) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `Article ${request.code} : ${request.name} was created` });
         this.addArticle(newArticle)
       },
       error: (error) => {
@@ -41,6 +43,7 @@ export class ArticleStateService {
     this.setLoading(true)
     this.service.updateArticle(request).subscribe({
       next: (newArticle) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `Article ${request.code} was updated` });
         this.editArticle(newArticle)
       },
       error: (error) => {
@@ -57,6 +60,7 @@ export class ArticleStateService {
     this.service.deleteArticle(code).subscribe({
       next: () => {
         this.removeArticle(code)
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `Article ${code} was deleted` });
       },
       error: (error) => {
         this.setError(error)

@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {ArticlePageComponent} from "./articles/article-page/article-page.component";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RatingModule} from "primeng/rating";
 import {TableModule} from "primeng/table";
@@ -16,6 +16,7 @@ import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {HttpErrorInterceptor} from "./interceptors/http-error.interceptor";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,11 @@ import {ConfirmPopupModule} from "primeng/confirmpopup";
   providers: [
     ConfirmationService,
     MessageService,
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:HttpErrorInterceptor,
+      multi:true
+    }
   ],
   bootstrap: [AppComponent]
 })

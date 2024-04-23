@@ -20,12 +20,11 @@
           dataKey="code" editMode="row">
           <ng-template pTemplate="header">
             <tr>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:20%">Code</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:20%" pSortableColumn="name">Name</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:20%">Consumption</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:20%">Machinery</th>
-              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:10%"></th>
-              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:10%"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:23%">Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:23%" pSortableColumn="name">Name</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:23%">Consumption</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:23%">Machinery</th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:8%"></th>
             </tr>
             <tr>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
@@ -41,7 +40,6 @@
                 <p-columnFilter type="text" field="machinery"></p-columnFilter>
               </th>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-article let-editing="editing">
@@ -52,7 +50,7 @@
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input class="bg-base-200 p-2 rounded border border-accent" pInputText type="text" [(ngModel)]="article.name" required>
+                    <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="article.name" required>
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{article.name}}
@@ -62,7 +60,7 @@
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input class="bg-base-200 p-2 rounded border border-accent" pInputText type="text" [(ngModel)]="article.consumption" required>
+                    <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="article.consumption" required>
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{article.consumption}}
@@ -72,7 +70,7 @@
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input class="bg-base-200 p-2 rounded border border-accent" pInputText type="text" [(ngModel)]="article.machinery" required>
+                    <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="article.machinery" required>
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{article.machinery}}
@@ -86,22 +84,6 @@
                   <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" class="p-button-rounded p-button-text p-button-danger"></button>
                 </div>
               </td>
-              <td class="border-r-2 border-base-300">
-                <div class="flex align-items-center justify-content-center gap-2">
-                  <p-confirmPopup>
-                    <ng-template pTemplate="headless" let-message>
-                      <section class="card p-5 flex flex-col gap-2 bg-base-300">
-                        <span class="text-accent">{{ message.message }}</span>
-                        <section class="flex flex-row gap-2">
-                          <button (click)="rejectDelete()" class="btn btn-ghost text-accent">Cancel</button>
-                          <button (click)="acceptDelete()" class="btn btn-error text-accent">Delete</button>
-                        </section>
-                      </section>
-                    </ng-template>
-                  </p-confirmPopup>
-                  <button class="btn btn-error" (click)="deleteArticle($event, article.code)">Delete</button>
-                </div>
-              </td>
             </tr>
           </ng-template>
         </p-table>
@@ -109,7 +91,7 @@
     </div>
   </ng-container>
 
-  <div class="grid grid-cols-3">
+  <div class="grid grid-cols-3 gap-10">
     <section class="card bg-base-200 flex flex-col gap-10 p-4 col-span-2">
       <h2 class="w-full text-center font-bold text-2xl">Add Article</h2>
       <form [formGroup]="baseForm" class="flex flex-col gap-3">
@@ -145,6 +127,22 @@
         </div>
         <section class="mt-6 w-full flex justify-center items-center">
           <p-button class="btn btn-success btn-lg" (click)="createArticle()" [disabled]="baseForm.invalid">Create</p-button>
+        </section>
+      </form>
+    </section>
+    <section class="card bg-base-200 flex flex-col gap-10 p-4 h-fit">
+      <h2 class="w-full text-center font-bold text-2xl">Delete Article</h2>
+      <form [formGroup]="deleteForm" class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="code" class="bold">Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="code" id="code">
+          </div>
+          <p class="text-red-700" *ngIf="deleteForm.get('code')?.touched&&deleteForm.get('code')!.hasError('required')">Code required.</p>
+          <p class="text-red-700" *ngIf="deleteForm.get('code')?.touched&&deleteForm.get('code')!.hasError('pattern')">Code invalid (must contain only numbers).</p>
+        </div>
+        <section class="mt-6 w-full flex justify-center items-center">
+          <p-button class="btn btn-error btn-lg" (click)="deleteArticle()" [disabled]="deleteForm.invalid">Delete</p-button>
         </section>
       </form>
     </section>

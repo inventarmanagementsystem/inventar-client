@@ -15,14 +15,15 @@ import {ConfirmPopup} from "primeng/confirmpopup";
 })
 export class ArticlePageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription()
-  baseForm: FormGroup = new FormGroup({});
+  baseForm: FormGroup = new FormGroup({})
+  deleteForm: FormGroup = new FormGroup({})
+  error: string | null = null;
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
 
   constructor(
-    public articleState: ArticleStateService,
-    private router: Router,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    public articleState: ArticleStateService,
+    private router: Router
   ) { }
 
   ngOnInit(){
@@ -54,6 +55,13 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
         Validators.maxLength(128)
       ]),
     },{updateOn:'change'});
+
+    this.deleteForm = new FormGroup({
+      code: new FormControl("", [
+        Validators.required,
+        Validators.pattern("^[0-9]*$")
+      ])
+    })
   }
 
   private getAllArticles(): Subscription{
@@ -88,9 +96,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
       machinery: article.machinery
     }
 
-    this.articleState.updateArticle(request)
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: `Article ${article.code} was updated` });
-  }
+    this.articleState.updateArticle(request)}
 
   createArticle() {
     let request: CreateArticleRequest = {
@@ -101,31 +107,11 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
     };
 
     this.articleState.createArticle(request)
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: `Article ${request.code} : ${request.name} was added` });
     this.initializeForms()
   }
 
-  deleteArticle(event: Event, code: number) {
-    const confirmation: Confirmation = {
-      target: event.target as EventTarget,
-      message: 'Do you want to delete this article?',
-      accept: () => {
-        this.articleState.deleteArticle(code)
-        this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Article successfully deleted', life: 3000 });
-      },
-      reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Canceled', detail: 'Article was not deleted', life: 3000 });
-      }
-    };
-
-    this.confirmationService.confirm(confirmation);
-  }
-
-  acceptDelete() {
-    this.confirmPopup.accept();
-  }
-
-  rejectDelete() {
-    this.confirmPopup.reject();
+  deleteArticle() {
+    let code = Number(this.deleteForm.value.code)
+    this.articleState.deleteArticle(code)
   }
 }
