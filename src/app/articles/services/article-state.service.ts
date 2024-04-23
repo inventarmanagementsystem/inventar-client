@@ -52,11 +52,11 @@ export class ArticleStateService {
     })
   }
 
-  deleteArticle(id: number) {
+  deleteArticle(code: number) {
     this.setLoading(true)
-    this.service.deleteArticle(id).subscribe({
+    this.service.deleteArticle(code).subscribe({
       next: () => {
-        this.removeArticle(id)
+        this.removeArticle(code)
       },
       error: (error) => {
         this.setError(error)
@@ -67,9 +67,9 @@ export class ArticleStateService {
     })
   }
 
-  getArticle(id: number){
+  getArticle(code: number){
     this.setLoading(true)
-    return this.service.getArticle(id)
+    return this.service.getArticle(code)
   }
 
   getArticles(){
@@ -79,28 +79,17 @@ export class ArticleStateService {
 
   // State updaters
 
-  search(searchText: string) {
-    const currentState = this.stateSubject.getValue();
-    const filteredArticles = currentState.filteredArticles.filter(article =>
-      article.code.toLocaleString().includes(searchText.toLowerCase()) ||
-      article.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-    console.log(filteredArticles)
-
-    this.setFilteredArticles(filteredArticles);
-  }
-
   addArticle(newArticle: Article) {
     let articles: Article[] = [...this.stateSubject.value.articles, newArticle]
     this.setState({articles})
   }
 
-  removeArticle(id: number){
+  removeArticle(code: number){
     let oldArticles: Article[] = this.stateSubject.value.articles
     let articles: Article[] = []
 
     oldArticles.forEach(p => {
-      if(p.id != id) articles.push(p)
+      if(p.code != code) articles.push(p)
     })
 
     this.setState({articles})
@@ -111,7 +100,7 @@ export class ArticleStateService {
     let articles: Article[] = []
 
     oldArticles.forEach(p => {
-      articles.push(p.id === article.id ? article : p);
+      articles.push(p.code === article.code ? article : p);
     })
 
     this.setState({articles})

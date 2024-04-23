@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {ArticlePageComponent} from "./articles/article-page/article-page.component";
 import {HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RatingModule} from "primeng/rating";
 import {TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
@@ -15,6 +15,7 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,9 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     DropdownModule,
     ButtonModule,
     RippleModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ConfirmPopupModule,
+    ReactiveFormsModule
   ],
   providers: [
     ConfirmationService,
