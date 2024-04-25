@@ -13,7 +13,6 @@ import {MessageService} from "primeng/api";
 export class ArticleStateService {
   private stateSubject = new BehaviorSubject<ArticleState>({
     articles: [],
-    filteredArticles: [],
     loading: false,
     error: null
   });
@@ -124,9 +123,6 @@ export class ArticleStateService {
     this.setState({articles})
   }
 
-  setFilteredArticles(filteredArticles: Article[]){
-    this.setState({filteredArticles})
-  }
 
   setState(partialState: Partial<ArticleState>){
     this.stateSubject.next({...this.stateSubject.value,...partialState})

@@ -23,7 +23,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     public articleState: ArticleStateService,
-    private router: Router
   ) { }
 
   ngOnInit(){
@@ -72,7 +71,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
       .subscribe({
       next:(articles)=>{
         this.articleState.setArticles(articles)
-        this.articleState.setFilteredArticles(articles)
       },
       error:(error)=>{
         this.articleState.setError(error)

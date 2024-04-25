@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <div class="p-20 flex flex-col gap-10">
   <div class="w-full flex justify-center items-center">
     <h1 class="text-6xl font-extrabold text-center underline">ARTICLE DATABASE</h1>
@@ -97,8 +99,8 @@
       <form [formGroup]="baseForm" class="flex flex-col gap-3">
         <div class="flex flex-row gap-2 items-center">
           <div class="flex flex-row gap-2 items-center">
-            <label for="code" class="bold">Code: </label>
-            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="code" id="code">
+            <label for="create-code" class="bold">Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="code" id="create-code">
           </div>
           <p class="text-red-700" *ngIf="baseForm.get('code')?.touched&&baseForm.get('code')!.hasError('required')">Code required.</p>
           <p class="text-red-700" *ngIf="baseForm.get('code')?.touched&&baseForm.get('code')!.hasError('pattern')">Code invalid (must contain only numbers).</p>
@@ -135,8 +137,8 @@
       <form [formGroup]="deleteForm" class="flex flex-col gap-3">
         <div class="flex flex-row gap-2 items-center">
           <div class="flex flex-row gap-2 items-center">
-            <label for="code" class="bold">Code: </label>
-            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="code" id="code">
+            <label for="delete-code" class="bold">Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="code" id="delete-code">
           </div>
           <p class="text-red-700" *ngIf="deleteForm.get('code')?.touched&&deleteForm.get('code')!.hasError('required')">Code required.</p>
           <p class="text-red-700" *ngIf="deleteForm.get('code')?.touched&&deleteForm.get('code')!.hasError('pattern')">Code invalid (must contain only numbers).</p>

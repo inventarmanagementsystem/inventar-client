@@ -1,0 +1,77 @@
+<app-navbar></app-navbar>
+
+<div class="p-20 flex flex-col gap-10">
+  <div class="w-full flex justify-center items-center">
+    <h1 class="text-6xl font-extrabold text-center underline">LOCATION DATABASE</h1>
+  </div>
+
+  <ng-container *ngIf="locationState.state$ | async as state">
+    <div>
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="text-md font-bold">Press any location code to copy it.</p>
+        </div>
+        <p-table
+          [customSort]="true" [value]="state.locations"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [globalFilterFields]="['code', 'name', 'consumption', 'machinery']"
+          dataKey="code" editMode="row">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:100%">Code</th>
+            </tr>
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
+                <p-columnFilter type="text" field="code"></p-columnFilter>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-location>
+            <tr [pEditableRow]="location" class="bg-base-200 text-accent border-b-2 border-base-300">
+              <td class="border-l-2 border-base-300 cursor-pointer hover:bg-base-300 justify-center" (click)="copyCodeToClipboard(location.code)">
+                <p class="text-center">{{location.code}}</p>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="grid grid-cols-2 gap-10">
+    <section class="card bg-base-200 flex flex-col gap-10 p-4">
+      <h2 class="w-full text-center font-bold text-2xl">Add Location</h2>
+      <form [formGroup]="baseForm" class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-code" class="bold">Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="code" id="create-code">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('code')?.touched&&baseForm.get('code')!.hasError('required')">Code required.</p></div>
+        <section class="mt-6 w-full flex justify-center items-center">
+          <p-button class="btn btn-success btn-lg" (click)="createLocation()" [disabled]="baseForm.invalid">Create</p-button>
+        </section>
+      </form>
+    </section>
+    <section class="card bg-base-200 flex flex-col gap-10 p-4 h-fit">
+      <h2 class="w-full text-center font-bold text-2xl">Delete Location</h2>
+      <form [formGroup]="deleteForm" class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="delete-code" class="bold">Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="code" id="delete-code">
+          </div>
+          <p class="text-red-700" *ngIf="deleteForm.get('code')?.touched&&deleteForm.get('code')!.hasError('required')">Code required.</p>
+        </div>
+        <section class="mt-6 w-full flex justify-center items-center">
+          <p-button class="btn btn-error btn-lg" (click)="deleteLocation()" [disabled]="deleteForm.invalid">Delete</p-button>
+        </section>
+      </form>
+    </section>
+  </div>
+</div>
+<p-toast></p-toast>

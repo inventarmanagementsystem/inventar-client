@@ -17,11 +17,15 @@ import {RippleModule} from "primeng/ripple";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {HttpErrorInterceptor} from "./interceptors/http-error.interceptor";
+import { NavbarComponent } from './navbar/navbar.component';
+import { LocationPageComponent } from './locations/location-page/location-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ArticlePageComponent
+    ArticlePageComponent,
+    NavbarComponent,
+    LocationPageComponent
   ],
   imports: [
     HttpClientModule,
