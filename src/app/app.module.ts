@@ -19,13 +19,15 @@ import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {HttpErrorInterceptor} from "./interceptors/http-error.interceptor";
 import { NavbarComponent } from './navbar/navbar.component';
 import { LocationPageComponent } from './locations/location-page/location-page.component';
+import { ArticleLocationPageComponent } from './article-locations/article-location-page/article-location-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArticlePageComponent,
     NavbarComponent,
-    LocationPageComponent
+    LocationPageComponent,
+    ArticleLocationPageComponent
   ],
   imports: [
     HttpClientModule,

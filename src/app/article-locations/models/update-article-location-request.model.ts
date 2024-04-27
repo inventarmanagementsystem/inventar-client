@@ -1,5 +1,4 @@
-export interface ArticleLocation {
-  code: number,
+export interface UpdateArticleLocationRequest {
   articleCode: number,
   locationCode: number,
   count: number

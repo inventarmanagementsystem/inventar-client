@@ -17,4 +17,8 @@ export class NavbarComponent {
   navigateToLocations() {
     this.router.navigate(["locations"])
   }
+
+  navigateToArticleLocations() {
+    this.router.navigate(["article-locations"])
+  }
 }

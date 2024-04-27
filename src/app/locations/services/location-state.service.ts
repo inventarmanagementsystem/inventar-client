@@ -95,7 +95,6 @@ export class LocationStateService {
     this.setState({locations})
   }
 
-
   setState(partialState: Partial<LocationState>){
     this.stateSubject.next({...this.stateSubject.value,...partialState})
   }

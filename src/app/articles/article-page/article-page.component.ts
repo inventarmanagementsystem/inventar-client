@@ -94,7 +94,8 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
       machinery: article.machinery
     }
 
-    this.articleState.updateArticle(request)}
+    this.articleState.updateArticle(request)
+  }
 
   createArticle() {
     let request: CreateArticleRequest = {

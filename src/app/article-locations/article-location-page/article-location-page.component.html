@@ -1,0 +1,133 @@
+<app-navbar></app-navbar>
+
+<div class="p-20 flex flex-col gap-10">
+  <div class="w-full flex justify-center items-center">
+    <h1 class="text-6xl font-extrabold text-center underline">ARTICLE LOCATION DATABASE</h1>
+  </div>
+
+  <ng-container *ngIf="articleLocationState.state$ | async as state">
+    <div>
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="text-md font-bold">Press any code to copy it.</p>
+        </div>
+        <p-table
+          [customSort]="true" [value]="state.articleLocations"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [globalFilterFields]="['code', 'name', 'consumption', 'machinery']"
+          dataKey="code" editMode="row">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:30%">Article Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:30%">Location Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:30%">Count</th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:10%"></th>
+            </tr>
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
+                <p-columnFilter type="text" field="articleCode"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+                <p-columnFilter type="text" field="locationCode"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+                <p-columnFilter type="text" field="count"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-articleLocation let-editing="editing">
+            <tr [pEditableRow]="articleLocation" class="bg-base-200 text-accent border-b-2 border-base-300">
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="copyCodeToClipboard(articleLocation.articleCode.toString())">{{articleLocation.articleCode}}</span>
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="copyCodeToClipboard(articleLocation.locationCode.toString())">{{articleLocation.locationCode}}</span>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="articleLocation.count" required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{articleLocation.count}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td class="border-r-2 border-base-300">
+                <div class="flex align-items-center justify-content-center gap-2">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(articleLocation)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" class="p-button-rounded p-button-text p-button-danger"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="grid grid-cols-3 gap-10">
+    <section class="card bg-base-200 flex flex-col gap-10 p-4 col-span-2">
+      <h2 class="w-full text-center font-bold text-2xl">Add Article Location</h2>
+      <form [formGroup]="baseForm" class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-article-code" class="bold">Article Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="articleCode" id="create-article-code">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('articleCode')?.touched&&baseForm.get('articleCode')!.hasError('required')">Article code required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('articleCode')?.touched&&baseForm.get('articleCode')!.hasError('pattern')">Article code invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-location-code" class="bold">Location Code: </label>
+            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="locationCode" id="create-location-code">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('locationCode')?.touched&&baseForm.get('locationCode')!.hasError('required')">Location code required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('locationCode')?.touched&&baseForm.get('locationCode')!.hasError('maxlength')">Location code must contain maximum 128 characters.</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="count" class="bold">Count: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="count" id="count">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('count')?.touched&&baseForm.get('count')!.hasError('required')">Count required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('count')?.touched&&baseForm.get('count')!.hasError('pattern')">Count invalid (must contain only numbers).</p>
+        </div>
+        <section class="mt-6 w-full flex justify-center items-center">
+          <p-button class="btn btn-success btn-lg" (click)="createArticleLocation()" [disabled]="baseForm.invalid">Create</p-button>
+        </section>
+      </form>
+    </section>
+    <section class="card bg-base-200 flex flex-col gap-10 p-4 h-fit">
+      <h2 class="w-full text-center font-bold text-2xl">Delete Article Location</h2>
+      <form [formGroup]="deleteForm" class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="delete-article-code" class="bold">Article Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="articleCode" id="delete-article-code">
+          </div>
+          <p class="text-red-700" *ngIf="deleteForm.get('articleCode')?.touched&&deleteForm.get('articleCode')!.hasError('required')">Article code required.</p>
+          <p class="text-red-700" *ngIf="deleteForm.get('articleCode')?.touched&&deleteForm.get('articleCode')!.hasError('pattern')">Article code invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="delete-location-code" class="bold">Location Code: </label>
+            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="locationCode" id="delete-location-code">
+          </div>
+          <p class="text-red-700" *ngIf="deleteForm.get('locationCode')?.touched&&deleteForm.get('locationCode')!.hasError('required')">Location code required.</p>
+          <p class="text-red-700" *ngIf="deleteForm.get('locationCode')?.touched&&deleteForm.get('locationCode')!.hasError('maxlength')">Location code must contain maximum 128 characters.</p>
+        </div>
+        <section class="mt-6 w-full flex justify-center items-center">
+          <p-button class="btn btn-error btn-lg" (click)="deleteArticleLocation()" [disabled]="deleteForm.invalid">Delete</p-button>
+        </section>
+      </form>
+    </section>
+  </div>
+</div>
+<p-toast></p-toast>
