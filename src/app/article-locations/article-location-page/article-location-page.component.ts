@@ -8,6 +8,8 @@ import {ArticleLocation} from "../models/article-location.model";
 import {UpdateArticleLocationRequest} from "../models/update-article-location-request.model";
 import {CreateArticleLocationRequest} from "../models/create-article-location-request.model";
 import {DeleteArticleLocationRequest} from "../models/delete-article-location-request.model";
+import {ActivatedRoute} from "@angular/router";
+import {Table} from "primeng/table";
 
 @Component({
   selector: 'app-article-location-page',
@@ -19,8 +21,12 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
   deleteForm: FormGroup = new FormGroup({})
   error: string | null = null;
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
+  filters: { [key: string]: any } = {};
+  noDataReturned: boolean = false;
+  @ViewChild('dt') table?: Table;
 
   constructor(
+    private route: ActivatedRoute,
     private messageService: MessageService,
     public articleLocationState: ArticleLocationStateService,
   ) { }
@@ -31,6 +37,11 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
     )
 
     this.initializeForms();
+
+    this.route.queryParams.subscribe(params => {
+      this.filters['articleCode'] = { value: params['articleCode'] || '' };
+      this.filters['locationCode'] = { value: params['locationCode'] || '' };
+    });
   }
 
   ngOnDestroy() {
@@ -113,5 +124,27 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
 
     this.articleLocationState.deleteArticleLocation(request)
     this.initializeForms()
+  }
+
+  checkNoData(event: any) {
+    this.noDataReturned = event.filteredValue.length === 0;
+  }
+
+  checkLocations(articleCode: number) {
+    this.filters['articleCode'] = { value: articleCode.toString() || '' };
+    if (this.table) {
+      setTimeout(() => {
+        this.table!.filter(this.filters['articleCode'].value, 'articleCode', 'contains');
+      });
+    }
+  }
+
+  checkArticles(locationCode: string) {
+    this.filters['locationCode'] = { value: locationCode.toString() || '' };
+    if (this.table) {
+      setTimeout(() => {
+        this.table!.filter(this.filters['locationCode'].value, 'locationCode', 'contains');
+      });
+    }
   }
 }

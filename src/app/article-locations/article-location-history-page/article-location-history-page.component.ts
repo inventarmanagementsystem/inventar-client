@@ -5,6 +5,8 @@ import {ConfirmPopup} from "primeng/confirmpopup";
 import {MessageService} from "primeng/api";
 import {ArticleLocationStateService} from "../services/article-location-state.service";
 import {CreateStockHistoryRequest} from "../models/create-stock-history-request.model";
+import {Router} from "@angular/router";
+import {Table} from "primeng/table";
 
 @Component({
   selector: 'app-article-location-history-page',
@@ -15,10 +17,14 @@ private subscriptions = new Subscription()
   baseForm: FormGroup = new FormGroup({})
   error: string | null = null;
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
+  noDataReturned: boolean = false;
+  filters: { [key: string]: any } = {};
+  @ViewChild('dt') table?: Table;
 
   constructor(
     private messageService: MessageService,
     public state: ArticleLocationStateService,
+    private router: Router
   ) { }
 
   ngOnInit(){
@@ -105,5 +111,35 @@ private subscriptions = new Subscription()
 
   deleteStockHistory(id: number) {
     this.state.deleteStockHistory(id)
+  }
+
+  checkNoData(event: any) {
+    this.noDataReturned = event.filteredValue.length === 0;
+  }
+
+  checkLocations(code: number) {
+    this.router.navigate(['/article-locations'], { queryParams: { articleCode: code } });
+  }
+
+  checkArticles(code: string) {
+    this.router.navigate(['/article-locations'], { queryParams: { locationCode: code } });
+  }
+
+  checkArticleHistory(articleCode: number) {
+    this.filters['articleCode'] = { value: articleCode.toString() || '' };
+    if (this.table) {
+      setTimeout(() => {
+        this.table!.filter(this.filters['articleCode'].value, 'articleCode', 'contains');
+      });
+    }
+  }
+
+  checkLocationHistory(locationCode: string) {
+    this.filters['locationCode'] = { value: locationCode.toString() || '' };
+    if (this.table) {
+      setTimeout(() => {
+        this.table!.filter(this.filters['locationCode'].value, 'locationCode', 'contains');
+      });
+    }
   }
 }

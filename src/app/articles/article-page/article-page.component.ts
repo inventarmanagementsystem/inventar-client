@@ -23,6 +23,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     public articleState: ArticleStateService,
+    private router: Router
   ) { }
 
   ngOnInit(){
@@ -102,5 +103,9 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   deleteArticle() {
     let code = Number(this.deleteForm.value.code)
     this.articleState.deleteArticle(code)
+  }
+
+  checkLocations(code: number) {
+    this.router.navigate(['/article-locations'], { queryParams: { articleCode: code } });
   }
 }

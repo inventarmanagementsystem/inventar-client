@@ -9,16 +9,19 @@
     <div>
       <div class="flex flex-col gap-5">
         <div>
-          <p class="text-md font-bold">Press any code to copy it.</p>
+          <p class="text-md font-bold">Press any code to open a menu.</p>
         </div>
         <p-table
+          #dt
           [customSort]="true" [value]="state.stockHistory"
           [paginator]="true"
           [rows]="10"
           [showCurrentPageReport]="true"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           [rowsPerPageOptions]="[10, 25, 50]"
-          [globalFilterFields]="['code', 'name', 'consumption', 'machinery']"
+          [globalFilterFields]="['articleCode', 'locationCode']"
+          [filters]="filters"
+          (onFilter)="checkNoData($event)"
           dataKey="code" editMode="row">
           <ng-template pTemplate="header">
             <tr>
@@ -54,10 +57,36 @@
                 <span>{{alh.date | date: 'medium'}}</span>
               </td>
               <td class="border-l-2 border-base-300 cursor-pointer">
-                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="copyCodeToClipboard(alh.articleCode.toString())">{{alh.articleCode}}</span>
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op1.toggle($event)">{{alh.articleCode}}</span>
+                <p-overlayPanel #op1 [style]="{ 'background-color': '#151211' }">
+                  <div class="flex flex-column gap-3 w-25rem">
+                    <div>
+                      <button class="btn btn-accent" (click)="copyCodeToClipboard(alh.articleCode)">Copy Code</button>
+                    </div>
+                    <div>
+                      <button class="btn btn-accent" (click)="checkLocations(alh.articleCode)">Check Locations</button>
+                    </div>
+                    <div>
+                      <button class="btn btn-accent" (click)="checkArticleHistory(alh.articleCode)">Check History</button>
+                    </div>
+                  </div>
+                </p-overlayPanel>
               </td>
               <td class="border-l-2 border-base-300 cursor-pointer">
-                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="copyCodeToClipboard(alh.locationCode.toString())">{{alh.locationCode}}</span>
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op2.toggle($event)">{{alh.locationCode}}</span>
+                <p-overlayPanel #op2 [style]="{ 'background-color': '#151211' }">
+                  <div class="flex flex-column gap-3 w-25rem">
+                    <div>
+                      <button class="btn btn-accent" (click)="copyCodeToClipboard(alh.locationCode)">Copy Code</button>
+                    </div>
+                    <div>
+                      <button class="btn btn-accent" (click)="checkArticles(alh.locationCode)">Check Articles</button>
+                    </div>
+                    <div>
+                      <button class="btn btn-accent" (click)="checkLocationHistory(alh.locationCode)">Check History</button>
+                    </div>
+                  </div>
+                </p-overlayPanel>
               </td>
               <td class="border-l-2 border-base-300 cursor-pointer">
                 <span class="p-5 rounded-xl">{{alh.stockIn}}</span>
@@ -77,6 +106,14 @@
               <td class="border-l-2 border-base-300 cursor-pointer text-center">
                 <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded bg-red-700 p-button-text" (click)="deleteStockHistory(alh.id)"></button>
               </td>
+            </tr>
+          </ng-template>'
+          <ng-template pTemplate="footer" let-totalRecords>
+            <tr *ngIf="totalRecords === 0 && !noDataReturned">
+              <td [attr.colspan]="9" class="text-center text-red-500 bg-base-200">There is no stock history</td>
+            </tr>
+            <tr *ngIf="noDataReturned">
+              <td [attr.colspan]="9" class="text-center text-red-500 bg-base-200">There is no stock history for the applied filter</td>
             </tr>
           </ng-template>
         </p-table>
@@ -137,7 +174,7 @@
         </div>
         <div class="flex flex-row gap-2 items-center">
           <div class="flex flex-row gap-2 items-center">
-            <label for="create-source" class="bold">Source Code: </label>
+            <label for="create-source" class="bold">Source: </label>
             <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="source" id="create-source">
           </div>
           <p class="text-red-700" *ngIf="baseForm.get('sourceCode')?.touched&&baseForm.get('sourceCode')!.hasError('required')">Source code required.</p>

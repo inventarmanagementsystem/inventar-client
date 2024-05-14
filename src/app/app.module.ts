@@ -21,6 +21,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LocationPageComponent } from './locations/location-page/location-page.component';
 import { ArticleLocationPageComponent } from './article-locations/article-location-page/article-location-page.component';
 import { ArticleLocationHistoryPageComponent } from './article-locations/article-location-history-page/article-location-history-page.component';
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { ArticleLocationHistoryPageComponent } from './article-locations/article
     RippleModule,
     BrowserAnimationsModule,
     ConfirmPopupModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OverlayPanelModule
   ],
   providers: [
     ConfirmationService,
