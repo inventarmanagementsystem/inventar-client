@@ -1,4 +1,4 @@
 export interface DeleteArticleLocationRequest {
   articleCode: number,
-  locationCode: number
+  locationCode: string
 }

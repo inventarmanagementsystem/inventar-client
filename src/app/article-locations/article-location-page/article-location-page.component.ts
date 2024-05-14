@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ConfirmPopup} from "primeng/confirmpopup";
@@ -7,12 +7,13 @@ import {ArticleLocationStateService} from "../services/article-location-state.se
 import {ArticleLocation} from "../models/article-location.model";
 import {UpdateArticleLocationRequest} from "../models/update-article-location-request.model";
 import {CreateArticleLocationRequest} from "../models/create-article-location-request.model";
+import {DeleteArticleLocationRequest} from "../models/delete-article-location-request.model";
 
 @Component({
   selector: 'app-article-location-page',
   templateUrl: './article-location-page.component.html'
 })
-export class ArticleLocationPageComponent {
+export class ArticleLocationPageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription()
   baseForm: FormGroup = new FormGroup({})
   deleteForm: FormGroup = new FormGroup({})
@@ -105,6 +106,12 @@ export class ArticleLocationPageComponent {
   }
 
   deleteArticleLocation() {
+    let request: DeleteArticleLocationRequest = {
+      articleCode: Number(this.deleteForm.value.articleCode) as number,
+      locationCode: this.deleteForm.value.locationCode as string
+    }
 
+    this.articleLocationState.deleteArticleLocation(request)
+    this.initializeForms()
   }
 }

@@ -1,0 +1,153 @@
+<app-navbar></app-navbar>
+
+<div class="p-20 flex flex-col gap-10">
+  <div class="w-full flex justify-center items-center">
+    <h1 class="text-6xl font-extrabold text-center underline">STOCK HISTORY</h1>
+  </div>
+
+  <ng-container *ngIf="state.state$ | async as state">
+    <div>
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="text-md font-bold">Press any code to copy it.</p>
+        </div>
+        <p-table
+          [customSort]="true" [value]="state.stockHistory"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [globalFilterFields]="['code', 'name', 'consumption', 'machinery']"
+          dataKey="code" editMode="row">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Date</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Article Code</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Location Code</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Stock In</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Stock Out</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Order</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Necessary</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:12%">Source</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:4%"></th>
+            </tr>
+            <tr>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+                <p-columnFilter type="text" field="articleCode"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+                <p-columnFilter type="text" field="locationCode"></p-columnFilter>
+              </th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-alh>
+            <tr class="bg-base-200 text-accent border-b-2 border-base-300">
+              <td class="border-l-2 border-base-300 cursor-pointer text-center">
+                <span>{{alh.date | date: 'medium'}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="copyCodeToClipboard(alh.articleCode.toString())">{{alh.articleCode}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="copyCodeToClipboard(alh.locationCode.toString())">{{alh.locationCode}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="p-5 rounded-xl">{{alh.stockIn}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="p-5 rounded-xl">{{alh.stockOut}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="p-5 rounded-xl">{{alh.order}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer">
+                <span class="p-5 rounded-xl">{{alh.necessary}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer text-center">
+                <span>{{alh.source}}</span>
+              </td>
+              <td class="border-l-2 border-base-300 cursor-pointer text-center">
+                <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded bg-red-700 p-button-text" (click)="deleteStockHistory(alh.id)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </ng-container>
+  <div class="grid grid-cols-3 gap-10">
+    <section class="card bg-base-200 flex flex-col gap-10 p-4 col-span-2">
+      <h2 class="w-full text-center font-bold text-2xl">Add Article Location</h2>
+      <form [formGroup]="baseForm" class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-article-code" class="bold">Article Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="articleCode" id="create-article-code">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('articleCode')?.touched&&baseForm.get('articleCode')!.hasError('required')">Article code required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('articleCode')?.touched&&baseForm.get('articleCode')!.hasError('pattern')">Article code invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-location-code" class="bold">Location Code: </label>
+            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="locationCode" id="create-location-code">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('locationCode')?.touched&&baseForm.get('locationCode')!.hasError('required')">Location code required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('locationCode')?.touched&&baseForm.get('locationCode')!.hasError('maxlength')">Location code must contain maximum 128 characters.</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="stock-in" class="bold">Stock In: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="stockIn" id="stock-in">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('stockIn')?.touched&&baseForm.get('stockIn')!.hasError('required')">Stock in required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('stockIn')?.touched&&baseForm.get('stockIn')!.hasError('pattern')">Stock in (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="stock-out" class="bold">Stock Out: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="stockOut" id="stock-out">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('stockOut')?.touched&&baseForm.get('stockOut')!.hasError('required')">Stock out required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('stockOut')?.touched&&baseForm.get('stockOut')!.hasError('pattern')">Stock out invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="order" class="bold">Order: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="order" id="order">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('order')?.touched&&baseForm.get('order')!.hasError('required')">Order required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('order')?.touched&&baseForm.get('order')!.hasError('pattern')">Order invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="necessary" class="bold">Necessary: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="necessary" id="necessary">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('necessary')?.touched&&baseForm.get('necessary')!.hasError('required')">Necessary required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('necessary')?.touched&&baseForm.get('necessary')!.hasError('pattern')">Necessary invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-source" class="bold">Source Code: </label>
+            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="source" id="create-source">
+          </div>
+          <p class="text-red-700" *ngIf="baseForm.get('sourceCode')?.touched&&baseForm.get('sourceCode')!.hasError('required')">Source code required.</p>
+          <p class="text-red-700" *ngIf="baseForm.get('sourceCode')?.touched&&baseForm.get('sourceCode')!.hasError('maxlength')">Source code must contain maximum 128 characters.</p>
+        </div>
+        <section class="mt-6 w-full flex justify-center items-center">
+          <p-button class="btn btn-success btn-lg" (click)="createStockHistory()" [disabled]="baseForm.invalid">Create</p-button>
+        </section>
+      </form>
+    </section>
+  </div>
+</div>
+<p-toast></p-toast>

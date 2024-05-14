@@ -46,13 +46,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
       name: new FormControl('', [
         Validators.required,
         Validators.maxLength(128)
-      ]),
-      consumption: new FormControl('', [
-        Validators.maxLength(128)
-      ]),
-      machinery: new FormControl('', [
-        Validators.maxLength(128)
-      ]),
+      ])
     },{updateOn:'change'});
 
     this.deleteForm = new FormGroup({
@@ -89,9 +83,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   onRowEditSave(article: Article) {
     let request: UpdateArticleRequest = {
       code: article.code,
-      name: article.name,
-      consumption: article.consumption,
-      machinery: article.machinery
+      name: article.name
     }
 
     this.articleState.updateArticle(request)
@@ -100,9 +92,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   createArticle() {
     let request: CreateArticleRequest = {
       code: Number(this.baseForm.value.code) as number,
-      name: this.baseForm.value.name as string,
-      consumption: this.baseForm.value.consumption.trim() === "" ? "-" : this.baseForm.value.consumption as string,
-      machinery: this.baseForm.value.machinery.trim() === "" ? "-" : this.baseForm.value.machinery as string,
+      name: this.baseForm.value.name as string
     };
 
     this.articleState.createArticle(request)

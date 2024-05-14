@@ -20,6 +20,7 @@ import {HttpErrorInterceptor} from "./interceptors/http-error.interceptor";
 import { NavbarComponent } from './navbar/navbar.component';
 import { LocationPageComponent } from './locations/location-page/location-page.component';
 import { ArticleLocationPageComponent } from './article-locations/article-location-page/article-location-page.component';
+import { ArticleLocationHistoryPageComponent } from './article-locations/article-location-history-page/article-location-history-page.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ArticleLocationPageComponent } from './article-locations/article-locati
     ArticlePageComponent,
     NavbarComponent,
     LocationPageComponent,
-    ArticleLocationPageComponent
+    ArticleLocationPageComponent,
+    ArticleLocationHistoryPageComponent
   ],
   imports: [
     HttpClientModule,

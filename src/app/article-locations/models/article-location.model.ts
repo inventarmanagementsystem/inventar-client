@@ -1,6 +1,6 @@
 export interface ArticleLocation {
   code: number,
   articleCode: number,
-  locationCode: number,
+  locationCode: string,
   count: number
 }

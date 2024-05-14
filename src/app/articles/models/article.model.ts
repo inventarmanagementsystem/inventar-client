@@ -4,7 +4,5 @@ export interface Article {
   id: number,
   code: number,
   name: string,
-  consumption: string,
-  machinery: string,
   articleLocations: ArticleLocation[]
 }

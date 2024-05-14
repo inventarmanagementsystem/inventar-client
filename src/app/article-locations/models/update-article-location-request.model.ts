@@ -1,5 +1,5 @@
 export interface UpdateArticleLocationRequest {
   articleCode: number,
-  locationCode: number,
+  locationCode: string,
   count: number
 }

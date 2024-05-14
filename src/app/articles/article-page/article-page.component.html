@@ -22,11 +22,9 @@
           dataKey="code" editMode="row">
           <ng-template pTemplate="header">
             <tr>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:23%">Code</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:23%" pSortableColumn="name">Name</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:23%">Consumption</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:23%">Machinery</th>
-              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:8%"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:45%">Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:45%" pSortableColumn="name">Name</th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:10%"></th>
             </tr>
             <tr>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
@@ -34,12 +32,6 @@
               </th>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
                 <p-columnFilter type="text" field="name"></p-columnFilter>
-              </th>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
-                <p-columnFilter type="text" field="consumption"></p-columnFilter>
-              </th>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
-                <p-columnFilter type="text" field="machinery"></p-columnFilter>
               </th>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
             </tr>
@@ -56,26 +48,6 @@
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{article.name}}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="article.consumption" required>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{article.consumption}}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="article.machinery" required>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{article.machinery}}
                   </ng-template>
                 </p-cellEditor>
               </td>
@@ -112,20 +84,6 @@
           </div>
           <p class="text-red-700" *ngIf="baseForm.get('name')?.touched&&baseForm.get('name')!.hasError('required')">Name required.</p>
           <p class="text-red-700" *ngIf="baseForm.get('name')?.touched&&baseForm.get('name')!.hasError('maxlength')">Name must contain maximum 128 characters.</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="consumption" class="bold">Consumption: </label>
-            <input type="text" placeholder="Enter consumption" class="input input-bordered w-full max-w-xs" formControlName="consumption" id="consumption">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('consumption')?.touched&&baseForm.get('consumption')!.hasError('maxlength')">Consumption must contain maximum 128 characters.</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="machinery" class="bold">Machinery: </label>
-            <input type="text" placeholder="Enter machinery" class="input input-bordered w-full max-w-xs" formControlName="machinery" id="machinery">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('machinery')?.touched&&baseForm.get('machinery')!.hasError('maxlength')">Machinery must contain maximum 128 characters.</p>
         </div>
         <section class="mt-6 w-full flex justify-center items-center">
           <p-button class="btn btn-success btn-lg" (click)="createArticle()" [disabled]="baseForm.invalid">Create</p-button>
