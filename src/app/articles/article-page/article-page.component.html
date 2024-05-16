@@ -38,8 +38,8 @@
           </ng-template>
           <ng-template pTemplate="body" let-article let-editing="editing">
             <tr [pEditableRow]="article" class="bg-base-200 text-accent border-b-2 border-base-300">
-              <td class="border-l-2 border-base-300 cursor-pointer">
-                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op.toggle($event)">{{article.code}}</span>
+              <td class="border-l-2 border-base-300">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl cursor-pointer" (click)="op.toggle($event)">{{article.code}}</span>
                 <p-overlayPanel #op [style]="{ 'background-color': '#151211' }">
                   <div class="flex flex-column gap-3 w-25rem">
                     <div>

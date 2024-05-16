@@ -56,8 +56,8 @@
               <td class="border-l-2 border-base-300 cursor-pointer text-center">
                 <span>{{alh.date + 'Z' | date: 'medium': '+0300'}}</span>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer">
-                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op1.toggle($event)">{{alh.articleCode}}</span>
+              <td class="border-l-2 border-base-300">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl cursor-pointer" (click)="op1.toggle($event)">{{alh.articleCode}}</span>
                 <p-overlayPanel #op1 [style]="{ 'background-color': '#151211' }">
                   <div class="flex flex-column gap-3 w-25rem">
                     <div>
@@ -72,8 +72,8 @@
                   </div>
                 </p-overlayPanel>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer">
-                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op2.toggle($event)">{{alh.locationCode}}</span>
+              <td class="border-l-2 border-base-300">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl cursor-pointer" (click)="op2.toggle($event)">{{alh.locationCode}}</span>
                 <p-overlayPanel #op2 [style]="{ 'background-color': '#151211' }">
                   <div class="flex flex-column gap-3 w-25rem">
                     <div>
@@ -88,22 +88,22 @@
                   </div>
                 </p-overlayPanel>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer">
+              <td class="border-l-2 border-base-300">
                 <span class="p-5 rounded-xl">{{alh.stockIn}}</span>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer">
+              <td class="border-l-2 border-base-300">
                 <span class="p-5 rounded-xl">{{alh.stockOut}}</span>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer">
+              <td class="border-l-2 border-base-300">
                 <span class="p-5 rounded-xl">{{alh.order}}</span>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer">
+              <td class="border-l-2 border-base-300">
                 <span class="p-5 rounded-xl">{{alh.necessary}}</span>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer text-center">
+              <td class="border-l-2 border-base-300 text-center">
                 <span>{{alh.source}}</span>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer text-center">
+              <td class="border-l-2 border-base-300 text-center">
                 <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded bg-red-700 p-button-text" (click)="deleteStockHistory(alh.id)"></button>
               </td>
             </tr>

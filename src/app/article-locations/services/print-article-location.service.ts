@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {ArticleLocation} from "../models/article-location.model";
 import {HttpErrorResponse} from "@angular/common/http";
+import {Observable, of} from "rxjs";
+import {Article} from "../../articles/models/article.model";
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +12,21 @@ export class PrintArticleLocationService {
 
   constructor() { }
 
-  getArticleLocations() {
+  getArticleLocations(): Observable<ArticleLocation[]> {
     if(this.articleLocations.length === 0){
       throw new HttpErrorResponse({error: "No article locations added.", status: 404})
     }
-    return this.articleLocations.splice(0, 0);
+    return of(this.articleLocations);
+  }
+
+  getArticleLocationByCodes(articleCode: number, locationCode: string) {
+    let index = this.articleLocations.findIndex(al => al.articleCode == articleCode && al.locationCode == locationCode)
+
+    if(index === -1) {
+      return null;
+    }
+
+    return this.articleLocations[index]
   }
 
   createArticleLocation(articleLocation: ArticleLocation){

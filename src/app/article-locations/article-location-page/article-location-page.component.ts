@@ -10,6 +10,7 @@ import {CreateArticleLocationRequest} from "../models/create-article-location-re
 import {DeleteArticleLocationRequest} from "../models/delete-article-location-request.model";
 import {ActivatedRoute} from "@angular/router";
 import {Table} from "primeng/table";
+import {PrintArticleLocationService} from "../services/print-article-location.service";
 
 @Component({
   selector: 'app-article-location-page',
@@ -24,11 +25,13 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
   filters: { [key: string]: any } = {};
   noDataReturned: boolean = false;
   @ViewChild('dt') table?: Table;
+  articleLocations: ArticleLocation[] = []
 
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
     public articleLocationState: ArticleLocationStateService,
+    public printService: PrintArticleLocationService
   ) { }
 
   ngOnInit(){
@@ -80,6 +83,7 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
     return this.articleLocationState.getArticleLocations()
       .subscribe({
         next:(articleLocations)=>{
+          this.articleLocations = articleLocations
           this.articleLocationState.setArticleLocations(articleLocations)
         },
         error:(error)=>{
@@ -146,5 +150,41 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
         this.table!.filter(this.filters['locationCode'].value, 'locationCode', 'contains');
       });
     }
+  }
+
+  isOnPrint(articleLocation: ArticleLocation): boolean {
+    return this.printService.getArticleLocationByCodes(articleLocation.articleCode, articleLocation.locationCode) !== null
+  }
+
+  addToPrint(articleLocation: ArticleLocation) {
+    this.printService.createArticleLocation(articleLocation)
+  }
+
+  removeFromPrint(articleLocation: ArticleLocation){
+    this.printService.deleteArticleLocation(articleLocation.articleCode, articleLocation.locationCode)
+  }
+
+  addAllToPrint() {
+    let count = 0
+    this.articleLocations.forEach(al => {
+      try {
+        this.printService.createArticleLocation(al)
+        count++
+      }
+      catch { }
+    })
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: `Added ${count} article locations to print` });
+  }
+
+  removeAllFromPrint() {
+    let count = 0
+    this.articleLocations.forEach(al => {
+      try {
+        this.printService.deleteArticleLocation(al.articleCode, al.locationCode)
+        count++
+      }
+      catch { }
+    })
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: `Removed ${count} article locations from print` });
   }
 }

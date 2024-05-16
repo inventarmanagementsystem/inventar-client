@@ -11,6 +11,12 @@
         <div>
           <p class="text-md font-bold">Press any code to open a menu.</p>
         </div>
+        <div>
+          <button pButton pRipple type="button" class="bg-blue-500 p-2 font-bold" (click)="addAllToPrint()">Add All Article Locations To Print</button>
+        </div>
+        <div>
+          <button pButton pRipple type="button" class="bg-red-700 p-2 font-bold" (click)="removeAllFromPrint()">Remove All Article Locations From Print</button>
+        </div>
         <p-table
           #dt
           [customSort]="true" [value]="state.articleLocations"
@@ -25,10 +31,11 @@
           dataKey="code" editMode="row">
           <ng-template pTemplate="header">
             <tr>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:35%">Article Code</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:35%">Location Code</th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:33%">Article Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:33%">Location Code</th>
               <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:22%">Count</th>
-              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:8%"></th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:6%"></th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:6%"></th>
             </tr>
             <tr>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
@@ -39,12 +46,13 @@
               </th>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-articleLocation let-editing="editing">
             <tr [pEditableRow]="articleLocation" class="bg-base-200 text-accent border-b-2 border-base-300">
-              <td class="border-l-2 border-base-300 cursor-pointer">
-                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op1.toggle($event)">{{articleLocation.articleCode}}</span>
+              <td class="border-l-2 border-base-300">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl cursor-pointer" (click)="op1.toggle($event)">{{articleLocation.articleCode}}</span>
                 <p-overlayPanel #op1 [style]="{ 'background-color': '#151211' }">
                   <div class="flex flex-column gap-3 w-25rem">
                     <div>
@@ -56,8 +64,8 @@
                   </div>
                 </p-overlayPanel>
               </td>
-              <td class="border-l-2 border-base-300 cursor-pointer">
-                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op2.toggle($event)">{{articleLocation.locationCode}}</span>
+              <td class="border-l-2 border-base-300">
+                <span class="hover:underline hover:bg-base-300 p-5 rounded-xl cursor-pointer" (click)="op2.toggle($event)">{{articleLocation.locationCode}}</span>
                 <p-overlayPanel #op2 [style]="{ 'background-color': '#151211' }">
                   <div class="flex flex-column gap-3 w-25rem">
                     <div>
@@ -69,7 +77,7 @@
                   </div>
                 </p-overlayPanel>
               </td>
-              <td class="border-l-2 border-base-300">
+              <td class="border-l-2 border-base-300" (click)="addToPrint(articleLocation)">
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="articleLocation.count" required>
@@ -85,6 +93,10 @@
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(articleLocation)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
                   <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" class="p-button-rounded p-button-text p-button-danger"></button>
                 </div>
+              </td>
+              <td class="border-l-2 border-base-300 text-center">
+                <button *ngIf="!this.isOnPrint(articleLocation)" pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded bg-blue-500 p-button-text" (click)="addToPrint(articleLocation)"></button>
+                <button *ngIf="this.isOnPrint(articleLocation)" pButton pRipple type="button" icon="pi pi-minus" class="p-button-rounded bg-red-700 p-button-text" (click)="removeFromPrint(articleLocation)"></button>
               </td>
             </tr>
           </ng-template>

@@ -2,16 +2,20 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MessageService} from "primeng/api";
 import {Table} from "primeng/table";
 import {PrintArticleLocationService} from "../services/print-article-location.service";
+import {Subscription} from "rxjs";
+import {ArticleLocation} from "../models/article-location.model";
 
 @Component({
   selector: 'app-print-article-locations',
   templateUrl: './print-article-locations.component.html'
 })
 export class PrintArticleLocationsComponent implements OnInit {
+  subscriptions = new Subscription()
   error: string | null = null;
   filters: { [key: string]: any } = {};
   noDataReturned: boolean = false;
   @ViewChild('dt') table?: Table;
+  articleLocations: ArticleLocation[] = []
 
   constructor(
     protected service: PrintArticleLocationService,
@@ -19,6 +23,10 @@ export class PrintArticleLocationsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.subscriptions.add(
+      this.service.getArticleLocations().subscribe(data => this.articleLocations = data)
+    )
+
     console.log(this.service.getArticleLocations())
   }
 
