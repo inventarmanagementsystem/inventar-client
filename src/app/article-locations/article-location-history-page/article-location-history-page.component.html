@@ -54,7 +54,7 @@
           <ng-template pTemplate="body" let-alh>
             <tr class="bg-base-200 text-accent border-b-2 border-base-300">
               <td class="border-l-2 border-base-300 cursor-pointer text-center">
-                <span>{{alh.date | date: 'medium'}}</span>
+                <span>{{alh.date + 'Z' | date: 'medium': '+0300'}}</span>
               </td>
               <td class="border-l-2 border-base-300 cursor-pointer">
                 <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op1.toggle($event)">{{alh.articleCode}}</span>

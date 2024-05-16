@@ -25,4 +25,8 @@ export class NavbarComponent {
   navigateToHistory() {
     this.router.navigate(["article-location-history"])
   }
+
+  navigateToPrintArticleLocations() {
+    this.router.navigate(["print-article-locations"])
+  }
 }

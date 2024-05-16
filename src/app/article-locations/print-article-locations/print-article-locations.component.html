@@ -1,0 +1,96 @@
+<app-navbar></app-navbar>
+
+<div class="p-20 flex flex-col gap-10">
+  <div class="w-full flex justify-center items-center">
+    <h1 class="text-6xl font-extrabold text-center underline">ARTICLE LOCATION DATABASE</h1>
+  </div>
+
+  <div>
+    <div class="flex flex-col gap-5">
+      <div>
+        <p class="text-md font-bold">Press any code to open a menu.</p>
+      </div>
+      <p-table
+        #dt
+        [customSort]="true" [value]="service.getArticleLocations()"
+        [paginator]="true"
+        [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['articleCode', 'locationCode']"
+        [filters]="filters"
+        (onFilter)="checkNoData($event)"
+        dataKey="code" editMode="row">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:35%">Article Code</th>
+            <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:35%">Location Code</th>
+            <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:22%">Count</th>
+            <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:8%"></th>
+          </tr>
+          <tr>
+            <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
+              <p-columnFilter type="text" field="articleCode"></p-columnFilter>
+            </th>
+            <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" >
+              <p-columnFilter type="text" field="locationCode"></p-columnFilter>
+            </th>
+            <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+            <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-articleLocation>
+          <tr [pEditableRow]="articleLocation" class="bg-base-200 text-accent border-b-2 border-base-300">
+            <td class="border-l-2 border-base-300 cursor-pointer">
+              <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op1.toggle($event)">{{articleLocation.articleCode}}</span>
+              <p-overlayPanel #op1 [style]="{ 'background-color': '#151211' }">
+                <div class="flex flex-column gap-3 w-25rem">
+                  <div>
+                    <button class="btn btn-accent" (click)="copyCodeToClipboard(articleLocation.articleCode)">Copy Code</button>
+                  </div>
+                  <div>
+                    <button class="btn btn-accent" (click)="checkLocations(articleLocation.articleCode)">Check Locations</button>
+                  </div>
+                </div>
+              </p-overlayPanel>
+            </td>
+            <td class="border-l-2 border-base-300 cursor-pointer">
+              <span class="hover:underline hover:bg-base-300 p-5 rounded-xl" (click)="op2.toggle($event)">{{articleLocation.locationCode}}</span>
+              <p-overlayPanel #op2 [style]="{ 'background-color': '#151211' }">
+                <div class="flex flex-column gap-3 w-25rem">
+                  <div>
+                    <button class="btn btn-accent" (click)="copyCodeToClipboard(articleLocation.locationCode)">Copy Code</button>
+                  </div>
+                  <div>
+                    <button class="btn btn-accent" (click)="checkArticles(articleLocation.locationCode)">Check Articles</button>
+                  </div>
+                </div>
+              </p-overlayPanel>
+            </td>
+            <td class="border-l-2 border-base-300">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="articleLocation.count" required>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{articleLocation.count}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer" let-totalRecords>
+          <tr *ngIf="totalRecords === 0 && !noDataReturned">
+            <td [attr.colspan]="4" class="text-center text-red-500 bg-base-200">There are no article locations</td>
+          </tr>
+          <tr *ngIf="noDataReturned">
+            <td [attr.colspan]="4" class="text-center text-red-500 bg-base-200">There are no article locations for the applied filter</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<p-toast></p-toast>

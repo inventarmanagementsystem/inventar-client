@@ -22,9 +22,9 @@
           dataKey="code" editMode="row">
           <ng-template pTemplate="header">
             <tr>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:45%">Code</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:45%" pSortableColumn="name">Name</th>
-              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:10%"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:46%">Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:46%" pSortableColumn="name">Name</th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:8%"></th>
             </tr>
             <tr>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
@@ -51,7 +51,7 @@
                   </div>
                 </p-overlayPanel>
               </td>
-              <td>
+              <td class="border-l-2 border-base-300">
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="article.name" required>
@@ -61,7 +61,7 @@
                   </ng-template>
                 </p-cellEditor>
               </td>
-              <td class="border-r-2 border-base-300">
+              <td class="border-l-2 border-base-300">
                 <div class="flex align-items-center justify-content-center gap-2">
                   <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(article)" class="p-button-rounded p-button-text p-button-success mr-2"></button>

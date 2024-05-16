@@ -22,6 +22,9 @@ import { LocationPageComponent } from './locations/location-page/location-page.c
 import { ArticleLocationPageComponent } from './article-locations/article-location-page/article-location-page.component';
 import { ArticleLocationHistoryPageComponent } from './article-locations/article-location-history-page/article-location-history-page.component';
 import {OverlayPanelModule} from "primeng/overlaypanel";
+import {
+  PrintArticleLocationsComponent
+} from "./article-locations/print-article-locations/print-article-locations.component";
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
     NavbarComponent,
     LocationPageComponent,
     ArticleLocationPageComponent,
-    ArticleLocationHistoryPageComponent
+    ArticleLocationHistoryPageComponent,
+    PrintArticleLocationsComponent
   ],
   imports: [
     HttpClientModule,

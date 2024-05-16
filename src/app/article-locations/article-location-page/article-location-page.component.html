@@ -9,7 +9,7 @@
     <div>
       <div class="flex flex-col gap-5">
         <div>
-          <p class="text-md font-bold">Press any code to copy it.</p>
+          <p class="text-md font-bold">Press any code to open a menu.</p>
         </div>
         <p-table
           #dt
@@ -25,10 +25,10 @@
           dataKey="code" editMode="row">
           <ng-template pTemplate="header">
             <tr>
-              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:30%">Article Code</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:30%">Location Code</th>
-              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:30%">Count</th>
-              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:10%"></th>
+              <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300" style="width:35%">Article Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:35%">Location Code</th>
+              <th class="bg-base-300 text-accent border-b-2 border-base-300" style="width:22%">Count</th>
+              <th class="bg-base-300 text-accent border-r-2 border-b-2 border-base-300" style="width:8%"></th>
             </tr>
             <tr>
               <th class="bg-base-300 text-accent border-l-2 border-b-2 border-base-300">
@@ -69,7 +69,7 @@
                   </div>
                 </p-overlayPanel>
               </td>
-              <td>
+              <td class="border-l-2 border-base-300">
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input class="bg-base-200 p-2 rounded border border-accent" type="text" [(ngModel)]="articleLocation.count" required>
@@ -79,7 +79,7 @@
                   </ng-template>
                 </p-cellEditor>
               </td>
-              <td class="border-r-2 border-base-300">
+              <td class="border-l-2 border-base-300">
                 <div class="flex align-items-center justify-content-center gap-2">
                   <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(articleLocation)" class="p-button-rounded p-button-text p-button-success mr-2"></button>

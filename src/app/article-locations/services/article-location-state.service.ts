@@ -26,7 +26,6 @@ export class ArticleLocationStateService {
   constructor(private messageService: MessageService,private service: ArticleLocationService) { }
 
   // Service calls
-
   createArticleLocation(request: CreateArticleLocationRequest){
     this.setLoading(true)
     this.service.createArticleLocation(request).subscribe({

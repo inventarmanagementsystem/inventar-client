@@ -6,13 +6,17 @@ import {ArticleLocationPageComponent} from "./article-locations/article-location
 import {
   ArticleLocationHistoryPageComponent
 } from "./article-locations/article-location-history-page/article-location-history-page.component";
+import {
+  PrintArticleLocationsComponent
+} from "./article-locations/print-article-locations/print-article-locations.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/articles', pathMatch: 'full' },
   { path: 'articles', component: ArticlePageComponent },
   { path: 'locations', component: LocationPageComponent },
   { path: 'article-locations', component: ArticleLocationPageComponent },
-  { path: 'article-location-history', component: ArticleLocationHistoryPageComponent }
+  { path: 'article-location-history', component: ArticleLocationHistoryPageComponent },
+  { path: 'print-article-locations', component: PrintArticleLocationsComponent }
 ];
 
 @NgModule({
