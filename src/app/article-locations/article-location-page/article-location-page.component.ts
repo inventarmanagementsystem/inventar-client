@@ -10,7 +10,7 @@ import {CreateArticleLocationRequest} from "../models/create-article-location-re
 import {DeleteArticleLocationRequest} from "../models/delete-article-location-request.model";
 import {ActivatedRoute} from "@angular/router";
 import {Table} from "primeng/table";
-import {PrintArticleLocationService} from "../services/print-article-location.service";
+import {PrintArticleLocationsStateService} from "../services/print-article-locations-state.service";
 
 @Component({
   selector: 'app-article-location-page',
@@ -31,7 +31,7 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private messageService: MessageService,
     public articleLocationState: ArticleLocationStateService,
-    public printService: PrintArticleLocationService
+    public state: PrintArticleLocationsStateService
   ) { }
 
   ngOnInit(){
@@ -153,22 +153,22 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
   }
 
   isOnPrint(articleLocation: ArticleLocation): boolean {
-    return this.printService.getArticleLocationByCodes(articleLocation.articleCode, articleLocation.locationCode) !== null
+    return this.state.getArticleLocationByCodes(articleLocation.articleCode, articleLocation.locationCode) !== null
   }
 
   addToPrint(articleLocation: ArticleLocation) {
-    this.printService.createArticleLocation(articleLocation)
+    this.state.addArticleLocation(articleLocation)
   }
 
   removeFromPrint(articleLocation: ArticleLocation){
-    this.printService.deleteArticleLocation(articleLocation.articleCode, articleLocation.locationCode)
+    this.state.removeArticleLocation(articleLocation.articleCode, articleLocation.locationCode)
   }
 
   addAllToPrint() {
     let count = 0
     this.articleLocations.forEach(al => {
       try {
-        this.printService.createArticleLocation(al)
+        this.state.addArticleLocation(al)
         count++
       }
       catch { }
@@ -180,7 +180,7 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
     let count = 0
     this.articleLocations.forEach(al => {
       try {
-        this.printService.deleteArticleLocation(al.articleCode, al.locationCode)
+        this.state.removeArticleLocation(al.articleCode, al.locationCode)
         count++
       }
       catch { }

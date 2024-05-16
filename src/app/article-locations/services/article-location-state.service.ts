@@ -7,7 +7,6 @@ import {CreateArticleLocationRequest} from "../models/create-article-location-re
 import {UpdateArticleLocationRequest} from "../models/update-article-location-request.model";
 import {ArticleLocation} from "../models/article-location.model";
 import {DeleteArticleLocationRequest} from "../models/delete-article-location-request.model";
-import {GetArticleLocationRequest} from "../models/get-article-location-request.model";
 import {ArticleLocationHistory} from "../models/article-location-history.model";
 import {CreateStockHistoryRequest} from "../models/create-stock-history-request.model";
 

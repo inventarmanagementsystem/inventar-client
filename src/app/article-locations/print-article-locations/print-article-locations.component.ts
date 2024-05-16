@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MessageService} from "primeng/api";
 import {Table} from "primeng/table";
-import {PrintArticleLocationService} from "../services/print-article-location.service";
 import {Subscription} from "rxjs";
 import {ArticleLocation} from "../models/article-location.model";
+import {PrintArticleLocationsStateService} from "../services/print-article-locations-state.service";
 
 @Component({
   selector: 'app-print-article-locations',
@@ -18,16 +18,16 @@ export class PrintArticleLocationsComponent implements OnInit {
   articleLocations: ArticleLocation[] = []
 
   constructor(
-    protected service: PrintArticleLocationService,
+    protected state: PrintArticleLocationsStateService,
     private messageService: MessageService
   ) { }
 
   ngOnInit() {
     this.subscriptions.add(
-      this.service.getArticleLocations().subscribe(data => this.articleLocations = data)
+      this.state.state$.subscribe(data => {
+        this.articleLocations = data.articleLocations
+      })
     )
-
-    console.log(this.service.getArticleLocations())
   }
 
   copyCodeToClipboard(code: string) {
@@ -55,5 +55,21 @@ export class PrintArticleLocationsComponent implements OnInit {
         this.table!.filter(this.filters['locationCode'].value, 'locationCode', 'contains');
       });
     }
+  }
+
+  removeFromPrint(articleLocation: ArticleLocation){
+    this.state.removeArticleLocation(articleLocation.articleCode, articleLocation.locationCode)
+  }
+
+  removeAllFromPrint() {
+    let count = 0
+    this.articleLocations.forEach(al => {
+      try {
+        this.state.removeArticleLocation(al.articleCode, al.locationCode)
+        count++
+      }
+      catch { }
+    })
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: `Removed ${count} article locations from print` });
   }
 }

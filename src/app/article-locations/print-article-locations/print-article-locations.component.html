@@ -2,13 +2,16 @@
 
 <div class="p-20 flex flex-col gap-10">
   <div class="w-full flex justify-center items-center">
-    <h1 class="text-6xl font-extrabold text-center underline">ARTICLE LOCATION DATABASE</h1>
+    <h1 class="text-6xl font-extrabold text-center underline">PRINT ARTICLE LOCATIONS</h1>
   </div>
 
   <div>
     <div class="flex flex-col gap-5">
       <div>
         <p class="text-md font-bold">Press any code to open a menu.</p>
+      </div>
+      <div *ngIf="articleLocations.length !== 0">
+        <button pButton pRipple type="button" class="bg-red-700 p-2 font-bold" (click)="removeAllFromPrint()">Remove All Article Locations From Print</button>
       </div>
       <p-table
         #dt
@@ -71,13 +74,16 @@
             <td class="border-l-2 border-base-300">
               <span class="p-5 rounded-xl">{{articleLocation.count}}</span>
             </td>
+            <td class="border-l-2 border-base-300 text-center">
+              <button pButton pRipple type="button" icon="pi pi-minus" class="p-button-rounded bg-red-700 p-button-text" (click)="removeFromPrint(articleLocation)"></button>
+            </td>
           </tr>
         </ng-template>
-        <ng-template pTemplate="footer" let-totalRecords>
-          <tr *ngIf="totalRecords === 0 && !noDataReturned">
-            <td [attr.colspan]="4" class="text-center text-red-500 bg-base-200">There are no article locations</td>
+        <ng-template pTemplate="footer">
+          <tr *ngIf="articleLocations.length === 0">
+            <td [attr.colspan]="4" class="text-center text-red-500 bg-base-200">There are no article locations selected for print</td>
           </tr>
-          <tr *ngIf="noDataReturned">
+          <tr *ngIf="articleLocations.length !== 0 && noDataReturned">
             <td [attr.colspan]="4" class="text-center text-red-500 bg-base-200">There are no article locations for the applied filter</td>
           </tr>
         </ng-template>
