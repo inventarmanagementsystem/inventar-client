@@ -8,14 +8,18 @@ import {GetArticleLocationRequest} from "../models/get-article-location-request.
 import {DeleteArticleLocationRequest} from "../models/delete-article-location-request.model";
 import {ArticleLocationHistory} from "../models/article-location-history.model";
 import {CreateStockHistoryRequest} from "../models/create-stock-history-request.model";
+import {ConfigService} from "../../system/config.service";
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleLocationService {
-  private server: string = "http://localhost:5156/api/v1/ArticleLocations";
+  private apiUrl: string = '';
+  private server: string = '';
 
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient, private config: ConfigService) {
+    this.apiUrl = config.getHostName();
+    this.server = `${this.apiUrl}/api/v1/ArticleLocations`
+  }
   getArticleLocations(): Observable<ArticleLocation[]> {
     return this.http.get<ArticleLocation[]>(this.server + "/all")
   }

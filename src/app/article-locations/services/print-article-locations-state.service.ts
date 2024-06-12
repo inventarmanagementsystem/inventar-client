@@ -7,6 +7,7 @@ import {ArticleLocationService} from "./article-location.service";
 import {ArticleLocation} from "../models/article-location.model";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ArticleLocationHistory} from "../models/article-location-history.model";
+import {LocalStorageService} from "../../utility/services/local-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,9 @@ export class PrintArticleLocationsStateService {
   });
   state$: Observable<PrintArticleLocationsState> = this.stateSubject.asObservable();
 
-  constructor() { }
+  constructor(
+    private localStorageService: LocalStorageService
+  ) { }
 
   getArticleLocationByCodes(articleCode: number, locationCode: string) {
     let index = this.stateSubject.value.articleLocations.findIndex(al => al.articleCode == articleCode && al.locationCode == locationCode)
@@ -55,6 +58,7 @@ export class PrintArticleLocationsStateService {
 
   setArticleLocations(articleLocations: ArticleLocation[]) {
     this.setState({articleLocations})
+    this.localStorageService.savePrintArticleLocations(articleLocations)
   }
 
   setState(partialState: Partial<PrintArticleLocationsState>){

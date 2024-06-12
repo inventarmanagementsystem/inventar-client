@@ -11,6 +11,7 @@ import {DeleteArticleLocationRequest} from "../models/delete-article-location-re
 import {ActivatedRoute} from "@angular/router";
 import {Table} from "primeng/table";
 import {PrintArticleLocationsStateService} from "../services/print-article-locations-state.service";
+import {LocalStorageService} from "../../utility/services/local-storage.service";
 
 @Component({
   selector: 'app-article-location-page',
@@ -18,7 +19,7 @@ import {PrintArticleLocationsStateService} from "../services/print-article-locat
 })
 export class ArticleLocationPageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription()
-  baseForm: FormGroup = new FormGroup({})
+  createForm: FormGroup = new FormGroup({})
   deleteForm: FormGroup = new FormGroup({})
   error: string | null = null;
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
@@ -31,7 +32,8 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private messageService: MessageService,
     public articleLocationState: ArticleLocationStateService,
-    public state: PrintArticleLocationsStateService
+    public state: PrintArticleLocationsStateService,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(){
@@ -51,32 +53,46 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe()
   }
 
-  private initializeForms(){
-    this.baseForm = new FormGroup({
-      articleCode: new FormControl("", [
-        Validators.required,
-        Validators.pattern("^[0-9]*$")
-      ]),
-      locationCode: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(128)
-      ]),
-      count: new FormControl('', [
-        Validators.required,
-        Validators.pattern("^[0-9]*$")
-      ])
-    },{updateOn:'change'});
+  private initializeForms() {
+    const savedCreateForm = this.localStorageService.loadCreateArticleLocationRequest();
+    const savedDeleteForm = this.localStorageService.loadDeleteArticleLocationRequest();
+
+    this.createForm = new FormGroup(
+      {
+        articleCode: new FormControl(savedCreateForm.articleCode || '', [
+          Validators.required,
+          Validators.pattern('^[0-9]*$')
+        ]),
+        locationCode: new FormControl(savedCreateForm.locationCode || '', [
+          Validators.required,
+          Validators.maxLength(128)
+        ]),
+        count: new FormControl(savedCreateForm.count || '', [
+          Validators.required,
+          Validators.pattern('^[0-9]*$')
+        ])
+      },
+      { updateOn: 'change' }
+    );
 
     this.deleteForm = new FormGroup({
-      articleCode: new FormControl("", [
+      articleCode: new FormControl(savedDeleteForm.articleCode || '', [
         Validators.required,
-        Validators.pattern("^[0-9]*$")
+        Validators.pattern('^[0-9]*$')
       ]),
-      locationCode: new FormControl('', [
+      locationCode: new FormControl(savedDeleteForm.locationCode || '', [
         Validators.required,
         Validators.maxLength(128)
       ])
-    })
+    });
+
+    this.createForm.valueChanges.subscribe(() => {
+      this.localStorageService.saveCreateArticleLocationRequest(this.createForm.value);
+    });
+
+    this.deleteForm.valueChanges.subscribe(() => {
+      this.localStorageService.saveDeleteArticleLocationRequest(this.deleteForm.value);
+    });
   }
 
   private getAllArticleLocations(): Subscription{
@@ -111,23 +127,40 @@ export class ArticleLocationPageComponent implements OnInit, OnDestroy {
 
   createArticleLocation() {
     let request: CreateArticleLocationRequest = {
-      articleCode: Number(this.baseForm.value.articleCode) as number,
-      locationCode: this.baseForm.value.locationCode as string,
-      count: Number(this.baseForm.value.count) as number
+      articleCode: Number(this.createForm.value.articleCode) as number,
+      locationCode: this.createForm.value.locationCode as string,
+      count: Number(this.createForm.value.count) as number
     };
 
-    this.articleLocationState.createArticleLocation(request)
-    this.initializeForms()
+    this.articleLocationState.createArticleLocation(request);
+
+    const defaultValues: CreateArticleLocationRequest = {
+      articleCode: 0,
+      locationCode: '',
+      count: 0
+    };
+
+    this.localStorageService.saveCreateArticleLocationRequest(defaultValues);
+
+    this.initializeForms();
   }
 
   deleteArticleLocation() {
     let request: DeleteArticleLocationRequest = {
       articleCode: Number(this.deleteForm.value.articleCode) as number,
       locationCode: this.deleteForm.value.locationCode as string
-    }
+    };
 
-    this.articleLocationState.deleteArticleLocation(request)
-    this.initializeForms()
+    this.articleLocationState.deleteArticleLocation(request);
+
+    const defaultValues: DeleteArticleLocationRequest = {
+      articleCode: 0,
+      locationCode: ''
+    };
+
+    this.localStorageService.saveDeleteArticleLocationRequest(defaultValues);
+
+    this.initializeForms();
   }
 
   checkNoData(event: any) {

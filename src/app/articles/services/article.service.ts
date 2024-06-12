@@ -4,14 +4,19 @@ import {Observable} from "rxjs";
 import {Article} from "../models/article.model";
 import {CreateArticleRequest} from "../models/create-article-request.model";
 import {UpdateArticleRequest} from "../models/update-article-request.model";
+import {ConfigService} from "../../system/config.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  private server: string = "http://localhost:5156/api/v1/Articles";
+  private apiUrl: string = '';
+  private server: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private config: ConfigService) {
+    this.apiUrl = config.getHostName();
+    this.server = `${this.apiUrl}/api/v1/Articles`
+  }
 
   getArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(this.server + "/all")

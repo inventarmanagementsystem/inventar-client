@@ -3,14 +3,19 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Location} from "../models/location.model";
 import {CreateLocationRequest} from "../models/create-location-request.model";
+import {ConfigService} from "../../system/config.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  private server: string = "http://localhost:5156/api/v1/Locations";
+  private apiUrl: string = '';
+  private server: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private config: ConfigService) {
+    this.apiUrl = config.getHostName();
+    this.server = `${this.apiUrl}/api/v1/Locations`
+  }
 
   getLocations(): Observable<Location[]> {
     return this.http.get<Location[]>(this.server + "/all")

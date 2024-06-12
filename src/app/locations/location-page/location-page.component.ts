@@ -6,6 +6,7 @@ import {MessageService} from "primeng/api";
 import {LocationStateService} from "../services/location-state.service";
 import {CreateLocationRequest} from "../models/create-location-request.model";
 import {Router} from "@angular/router";
+import {LocalStorageService} from "../../utility/services/local-storage.service";
 
 @Component({
   selector: 'app-location-page',
@@ -13,7 +14,7 @@ import {Router} from "@angular/router";
 })
 export class LocationPageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription()
-  baseForm: FormGroup = new FormGroup({})
+  createForm: FormGroup = new FormGroup({})
   deleteForm: FormGroup = new FormGroup({})
   error: string | null = null;
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
@@ -22,6 +23,7 @@ export class LocationPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private messageService: MessageService,
     public locationState: LocationStateService,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(){
@@ -37,17 +39,28 @@ export class LocationPageComponent implements OnInit, OnDestroy {
   }
 
   private initializeForms(){
-    this.baseForm = new FormGroup({
-      code: new FormControl("", [
+    const savedCreateForm = this.localStorageService.loadCreateLocationRequest();
+    const savedDeleteForm = this.localStorageService.loadDeleteLocationRequest();
+
+    this.createForm = new FormGroup({
+      code: new FormControl(savedCreateForm.code, [
         Validators.required
       ])
-    },{updateOn:'change'});
+    }, { updateOn: 'change' });
 
     this.deleteForm = new FormGroup({
-      code: new FormControl("", [
+      code: new FormControl(savedDeleteForm, [
         Validators.required
       ])
-    })
+    });
+
+    this.createForm.valueChanges.subscribe(() => {
+      this.localStorageService.saveCreateLocationRequest(this.createForm.value);
+    });
+
+    this.deleteForm.valueChanges.subscribe(() => {
+      this.localStorageService.saveDeleteLocationRequest(this.deleteForm.get("code")!.value);
+    });
   }
 
   private getAllLocations(): Subscription{
@@ -75,7 +88,7 @@ export class LocationPageComponent implements OnInit, OnDestroy {
 
   createLocation() {
     let request: CreateLocationRequest = {
-      code: this.baseForm.value.code as string
+      code: this.createForm.value.code as string
     };
 
     this.locationState.createLocation(request)

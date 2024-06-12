@@ -5,6 +5,73 @@
     <h1 class="text-6xl font-extrabold text-center underline">STOCK HISTORY</h1>
   </div>
 
+  <div class="grid grid-cols-3 gap-10 center">
+    <section class="card bg-base-200 flex flex-col gap-10 p-4 col-span-3">
+      <h2 class="w-full text-center font-bold text-2xl">Add Article Location</h2>
+      <form [formGroup]="createForm" class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-article-code" class="bold">Article Code: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="articleCode" id="create-article-code">
+          </div>
+          <p class="text-red-700" *ngIf="createForm.get('articleCode')?.touched&&createForm.get('articleCode')!.hasError('required')">Article code required.</p>
+          <p class="text-red-700" *ngIf="createForm.get('articleCode')?.touched&&createForm.get('articleCode')!.hasError('pattern')">Article code invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-location-code" class="bold">Location Code: </label>
+            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="locationCode" id="create-location-code">
+          </div>
+          <p class="text-red-700" *ngIf="createForm.get('locationCode')?.touched&&createForm.get('locationCode')!.hasError('required')">Location code required.</p>
+          <p class="text-red-700" *ngIf="createForm.get('locationCode')?.touched&&createForm.get('locationCode')!.hasError('maxlength')">Location code must contain maximum 128 characters.</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="stock-in" class="bold">Stock In: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="stockIn" id="stock-in">
+          </div>
+          <p class="text-red-700" *ngIf="createForm.get('stockIn')?.touched&&createForm.get('stockIn')!.hasError('required')">Stock in required.</p>
+          <p class="text-red-700" *ngIf="createForm.get('stockIn')?.touched&&createForm.get('stockIn')!.hasError('pattern')">Stock in (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="stock-out" class="bold">Stock Out: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="stockOut" id="stock-out">
+          </div>
+          <p class="text-red-700" *ngIf="createForm.get('stockOut')?.touched&&createForm.get('stockOut')!.hasError('required')">Stock out required.</p>
+          <p class="text-red-700" *ngIf="createForm.get('stockOut')?.touched&&createForm.get('stockOut')!.hasError('pattern')">Stock out invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="order" class="bold">Order: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="order" id="order">
+          </div>
+          <p class="text-red-700" *ngIf="createForm.get('order')?.touched&&createForm.get('order')!.hasError('required')">Order required.</p>
+          <p class="text-red-700" *ngIf="createForm.get('order')?.touched&&createForm.get('order')!.hasError('pattern')">Order invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="necessary" class="bold">Necessary: </label>
+            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="necessary" id="necessary">
+          </div>
+          <p class="text-red-700" *ngIf="createForm.get('necessary')?.touched&&createForm.get('necessary')!.hasError('required')">Necessary required.</p>
+          <p class="text-red-700" *ngIf="createForm.get('necessary')?.touched&&createForm.get('necessary')!.hasError('pattern')">Necessary invalid (must contain only numbers).</p>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-row gap-2 items-center">
+            <label for="create-source" class="bold">Source: </label>
+            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="source" id="create-source">
+          </div>
+          <p class="text-red-700" *ngIf="createForm.get('sourceCode')?.touched&&createForm.get('sourceCode')!.hasError('required')">Source code required.</p>
+          <p class="text-red-700" *ngIf="createForm.get('sourceCode')?.touched&&createForm.get('sourceCode')!.hasError('maxlength')">Source code must contain maximum 128 characters.</p>
+        </div>
+        <section class="mt-6 w-full flex justify-center items-center">
+          <p-button class="btn btn-success btn-lg" (click)="createStockHistory()" [disabled]="createForm.invalid">Create</p-button>
+        </section>
+      </form>
+    </section>
+  </div>
+
   <ng-container *ngIf="state.state$ | async as state">
     <div>
       <div class="flex flex-col gap-5">
@@ -120,71 +187,5 @@
       </div>
     </div>
   </ng-container>
-  <div class="grid grid-cols-3 gap-10">
-    <section class="card bg-base-200 flex flex-col gap-10 p-4 col-span-2">
-      <h2 class="w-full text-center font-bold text-2xl">Add Article Location</h2>
-      <form [formGroup]="baseForm" class="flex flex-col gap-3">
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="create-article-code" class="bold">Article Code: </label>
-            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="articleCode" id="create-article-code">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('articleCode')?.touched&&baseForm.get('articleCode')!.hasError('required')">Article code required.</p>
-          <p class="text-red-700" *ngIf="baseForm.get('articleCode')?.touched&&baseForm.get('articleCode')!.hasError('pattern')">Article code invalid (must contain only numbers).</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="create-location-code" class="bold">Location Code: </label>
-            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="locationCode" id="create-location-code">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('locationCode')?.touched&&baseForm.get('locationCode')!.hasError('required')">Location code required.</p>
-          <p class="text-red-700" *ngIf="baseForm.get('locationCode')?.touched&&baseForm.get('locationCode')!.hasError('maxlength')">Location code must contain maximum 128 characters.</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="stock-in" class="bold">Stock In: </label>
-            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="stockIn" id="stock-in">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('stockIn')?.touched&&baseForm.get('stockIn')!.hasError('required')">Stock in required.</p>
-          <p class="text-red-700" *ngIf="baseForm.get('stockIn')?.touched&&baseForm.get('stockIn')!.hasError('pattern')">Stock in (must contain only numbers).</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="stock-out" class="bold">Stock Out: </label>
-            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="stockOut" id="stock-out">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('stockOut')?.touched&&baseForm.get('stockOut')!.hasError('required')">Stock out required.</p>
-          <p class="text-red-700" *ngIf="baseForm.get('stockOut')?.touched&&baseForm.get('stockOut')!.hasError('pattern')">Stock out invalid (must contain only numbers).</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="order" class="bold">Order: </label>
-            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="order" id="order">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('order')?.touched&&baseForm.get('order')!.hasError('required')">Order required.</p>
-          <p class="text-red-700" *ngIf="baseForm.get('order')?.touched&&baseForm.get('order')!.hasError('pattern')">Order invalid (must contain only numbers).</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="necessary" class="bold">Necessary: </label>
-            <input type="text" placeholder="Enter code" class="input input-bordered w-full max-w-xs" formControlName="necessary" id="necessary">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('necessary')?.touched&&baseForm.get('necessary')!.hasError('required')">Necessary required.</p>
-          <p class="text-red-700" *ngIf="baseForm.get('necessary')?.touched&&baseForm.get('necessary')!.hasError('pattern')">Necessary invalid (must contain only numbers).</p>
-        </div>
-        <div class="flex flex-row gap-2 items-center">
-          <div class="flex flex-row gap-2 items-center">
-            <label for="create-source" class="bold">Source: </label>
-            <input type="text" placeholder="Enter name" class="input input-bordered w-full max-w-xs" formControlName="source" id="create-source">
-          </div>
-          <p class="text-red-700" *ngIf="baseForm.get('sourceCode')?.touched&&baseForm.get('sourceCode')!.hasError('required')">Source code required.</p>
-          <p class="text-red-700" *ngIf="baseForm.get('sourceCode')?.touched&&baseForm.get('sourceCode')!.hasError('maxlength')">Source code must contain maximum 128 characters.</p>
-        </div>
-        <section class="mt-6 w-full flex justify-center items-center">
-          <p-button class="btn btn-success btn-lg" (click)="createStockHistory()" [disabled]="baseForm.invalid">Create</p-button>
-        </section>
-      </form>
-    </section>
-  </div>
 </div>
 <p-toast></p-toast>

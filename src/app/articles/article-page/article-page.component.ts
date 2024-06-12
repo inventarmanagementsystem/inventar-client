@@ -8,6 +8,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreateArticleRequest} from "../models/create-article-request.model";
 import {UpdateArticleRequest} from "../models/update-article-request.model";
 import {ConfirmPopup} from "primeng/confirmpopup";
+import {LocalStorageService} from "../../utility/services/local-storage.service";
 
 @Component({
   selector: 'app-article-page',
@@ -15,7 +16,7 @@ import {ConfirmPopup} from "primeng/confirmpopup";
 })
 export class ArticlePageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription()
-  baseForm: FormGroup = new FormGroup({})
+  createForm: FormGroup = new FormGroup({})
   deleteForm: FormGroup = new FormGroup({})
   error: string | null = null;
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
@@ -23,7 +24,8 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     public articleState: ArticleStateService,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(){
@@ -38,24 +40,40 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe()
   }
 
-  private initializeForms(){
-    this.baseForm = new FormGroup({
-      code: new FormControl("", [
-        Validators.required,
-        Validators.pattern("^[0-9]*$")
-      ]),
-      name: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(128)
-      ])
-    },{updateOn:'change'});
+  private initializeForms() {
+    const savedCreateForm = this.localStorageService.loadCreateArticleRequest();
+    const savedDeleteForm = this.localStorageService.loadDeleteArticleRequest();
+
+    this.createForm = new FormGroup(
+      {
+        code: new FormControl(savedCreateForm.code || '', [
+          Validators.required,
+          Validators.pattern('^[0-9]*$')
+        ]),
+        name: new FormControl(savedCreateForm.name || '', [
+          Validators.required,
+          Validators.maxLength(128)
+        ])
+      },
+      { updateOn: 'change' }
+    );
 
     this.deleteForm = new FormGroup({
-      code: new FormControl("", [
+      code: new FormControl(savedDeleteForm.toString(), [
         Validators.required,
-        Validators.pattern("^[0-9]*$")
+        Validators.pattern('^[0-9]*$')
       ])
-    })
+    });
+
+    this.createForm.valueChanges.subscribe(() => {
+      this.localStorageService.saveCreateArticleRequest(this.createForm.value);
+    });
+
+    this.deleteForm.valueChanges.subscribe(() => {
+      this.localStorageService.saveDeleteArticleRequest(
+        Number(this.deleteForm.get('code')!.value)
+      );
+    });
   }
 
   private getAllArticles(): Subscription{
@@ -92,17 +110,31 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 
   createArticle() {
     let request: CreateArticleRequest = {
-      code: Number(this.baseForm.value.code) as number,
-      name: this.baseForm.value.name as string
+      code: Number(this.createForm.value.code) as number,
+      name: this.createForm.value.name as string
     };
 
-    this.articleState.createArticle(request)
-    this.initializeForms()
+    this.articleState.createArticle(request);
+
+    const defaultValues: CreateArticleRequest = {
+      code: 0,
+      name: ''
+    };
+
+    this.localStorageService.saveCreateArticleRequest(defaultValues);
+
+    this.initializeForms();
   }
 
   deleteArticle() {
-    let code = Number(this.deleteForm.value.code)
-    this.articleState.deleteArticle(code)
+    let code = Number(this.deleteForm.value.code);
+    this.articleState.deleteArticle(code);
+
+    const defaultValues: number = 0;
+
+    this.localStorageService.saveDeleteArticleRequest(defaultValues);
+
+    this.initializeForms();
   }
 
   checkLocations(code: number) {
