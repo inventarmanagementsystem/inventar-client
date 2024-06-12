@@ -19,3 +19,6 @@ export class AppComponent implements OnInit {
     this.printArticleLocationsService.setArticleLocations(this.localStorageService.loadPrintArticleLocations())
   }
 }
+
+
+// test
