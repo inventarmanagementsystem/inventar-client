@@ -25,6 +25,7 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
 import {
   PrintArticleLocationsComponent
 } from "./article-locations/print-article-locations/print-article-locations.component";
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {
     LocationPageComponent,
     ArticleLocationPageComponent,
     ArticleLocationHistoryPageComponent,
-    PrintArticleLocationsComponent
+    PrintArticleLocationsComponent,
+    LoginComponent
   ],
   imports: [
     HttpClientModule,

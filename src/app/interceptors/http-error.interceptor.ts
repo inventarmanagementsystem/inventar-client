@@ -52,7 +52,12 @@ export class HttpErrorInterceptor implements HttpInterceptor{
   }
 
   private displayError(error: HttpErrorResponse, errorMessage: string): void {
-    const summary = `${error.status}`;
+    let summary = `${error.status}`;
+
+    if(error.status === 0) {
+      summary = "API Connection Failed"
+      errorMessage = "Development state variable (config.service.ts) is set to the wrong value or there is another server issue."
+    }
 
     this.messageService.add({
       severity: 'error',
