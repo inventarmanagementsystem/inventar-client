@@ -26,6 +26,8 @@ import {
   PrintArticleLocationsComponent
 } from "./article-locations/print-article-locations/print-article-locations.component";
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import {AuthorizationInterceptor} from "./interceptors/authorization-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { LoginComponent } from './login/login.component';
     ArticleLocationPageComponent,
     ArticleLocationHistoryPageComponent,
     PrintArticleLocationsComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     HttpClientModule,
@@ -61,6 +64,11 @@ import { LoginComponent } from './login/login.component';
     {
       provide:HTTP_INTERCEPTORS,
       useClass:HttpErrorInterceptor,
+      multi:true
+    },
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:AuthorizationInterceptor,
       multi:true
     }
   ],

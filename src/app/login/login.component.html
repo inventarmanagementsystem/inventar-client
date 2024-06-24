@@ -1,1 +1,44 @@
-<p>login works!</p>
+<div
+  class="mt-20 grid place-items-center w-full min-h-136 p-10">
+  <div class="w-full sm:w-126 bg-base-200 shadow-xl flex flex-col items-center p-5 rounded-2xl gap-10 mb-0">
+    <h1 class="text-accent text-4xl marcellus
+               font-bold mt-2 mr-2 drop-shadow-md
+               select-none text-center">Sign In</h1>
+    <form [formGroup]="loginForm" class="flex flex-col gap-4 items-center">
+      <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col gap-2">
+          <label for="email" class="marcellus text-accent">Email</label>
+          <input
+            [class.border-red-700]="loginForm.get('email')?.touched&&(
+          loginForm.get('email')!.hasError('required') ||
+          loginForm.get('email')!.hasError('email')
+          )" (keyup.enter)="checkAndLogin()"
+            type="text" class="input input-bordered w-full max-w-xs" pInputText formControlName="email" id="email"/>
+        </div>
+        <p class="text-red-700" *ngIf="loginForm.get('email')?.touched&&loginForm.get('email')!.hasError('required')">Email required.</p>
+        <p class="text-red-700" *ngIf="loginForm.get('email')?.touched&&loginForm.get('email')!.hasError('email')">Email invalid.</p>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2">
+          <label for="password" class="marcellus text-accent">Password</label>
+          <input
+            [class.border-red-700]="loginForm.get('password')?.touched&&(
+          loginForm.get('password')!.hasError('required')
+          )" (keyup.enter)="checkAndLogin()"
+            type="password" class="input input-bordered w-full max-w-xs" pInputText formControlName="password" id="password"/>
+        </div>
+        <p class="text-red-700" *ngIf="loginForm.get('password')?.touched&&loginForm.get('password')!.hasError('required')">Password required.</p>
+      </div>
+    </form>
+    <ng-container *ngIf="state.state$ | async as state">
+      <section class="w-full flex flex-col justify-center items-center">
+        <div class="h-20 flex flex-row items-center justify-center">
+          <button *ngIf="!state.loading" class="btn btn-accent btn-lg mb-3 marcellus" (click)="login()" [disabled]="loginForm.invalid">Login</button>
+          <span *ngIf="state.loading" class="loading loading-spinner loading-lg text-primary"></span>
+        </div>
+        <p class="text-accent">Don't have an account?</p>
+        <p class="text-accent cursor-pointer underline" (click)="navigateToRegister()">Register</p>
+      </section>
+    </ng-container>
+  </div>
+</div>

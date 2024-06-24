@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
+import {UserStateService} from "../users/services/user-state.service";
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +8,8 @@ import {Router} from "@angular/router";
 })
 export class NavbarComponent {
   constructor(
-    private router: Router
+    private router: Router,
+    protected userState: UserStateService
   ) { }
 
   navigateToArticles() {

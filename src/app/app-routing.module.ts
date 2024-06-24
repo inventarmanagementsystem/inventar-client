@@ -9,14 +9,18 @@ import {
 import {
   PrintArticleLocationsComponent
 } from "./article-locations/print-article-locations/print-article-locations.component";
+import {LoginComponent} from "./login/login.component";
+import {RegisterComponent} from "./register/register.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: '/articles', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'articles', component: ArticlePageComponent },
   { path: 'locations', component: LocationPageComponent },
   { path: 'article-locations', component: ArticleLocationPageComponent },
   { path: 'article-location-history', component: ArticleLocationHistoryPageComponent },
-  { path: 'print-article-locations', component: PrintArticleLocationsComponent }
+  { path: 'print-article-locations', component: PrintArticleLocationsComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent }
 ];
 
 @NgModule({
