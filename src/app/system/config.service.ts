@@ -1,15 +1,15 @@
-import {Inject, Injectable} from '@angular/core';
-import {DOCUMENT} from "@angular/common";
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  constructor() {
+  }
 
   public getHostName(): string {
-    let development = this.document.location.hostname=="localhost";
-    return  development?  `http://${this.document.location.hostname}:8081`
-      :`http://${this.document.location.hostname}:8080`
+    let development = false
+    if(development) return "http://localhost:5156"
+    return `http://${window.location.hostname}:8080`
   }
 }
