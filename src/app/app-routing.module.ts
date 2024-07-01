@@ -11,16 +11,18 @@ import {
 } from "./article-locations/print-article-locations/print-article-locations.component";
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
+import {AuthGuard} from "./guards/authorization.guard";
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'articles', component: ArticlePageComponent },
-  { path: 'locations', component: LocationPageComponent },
-  { path: 'article-locations', component: ArticleLocationPageComponent },
-  { path: 'article-location-history', component: ArticleLocationHistoryPageComponent },
-  { path: 'print-article-locations', component: PrintArticleLocationsComponent },
+  { path: 'articles', component: ArticlePageComponent, canActivate: [AuthGuard] },
+  { path: 'locations', component: LocationPageComponent, canActivate: [AuthGuard] },
+  { path: 'article-locations', component: ArticleLocationPageComponent, canActivate: [AuthGuard] },
+  { path: 'article-location-history', component: ArticleLocationHistoryPageComponent, canActivate: [AuthGuard] },
+  { path: 'print-article-locations', component: PrintArticleLocationsComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent }
+  { path: 'register', component: RegisterComponent },
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({
